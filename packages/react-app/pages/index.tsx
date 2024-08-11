@@ -3,155 +3,193 @@ import PrimaryButton from "@/components/Button";
 import { useWeb3 } from "@/contexts/useWeb3";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function Home() {
-    const {
-        address,
-        getUserAddress,
-        sendCUSD,
-        mintMinipayNFT,
-        getNFTs,
-        signTransaction,
-    } = useWeb3();
-    const [cUSDLoading, setCUSDLoading] = useState(false);
-    const [nftLoading, setNFTLoading] = useState(false);
-    const [signingLoading, setSigningLoading] = useState(false);
-    const [userOwnedNFTs, setUserOwnedNFTs] = useState<string[]>([]);
-    const [tx, setTx] = useState<any>(undefined);
+  const {
+    address,
+    getUserAddress,
+    sendCUSD,
+    mintMinipayNFT,
+    getNFTs,
+    signTransaction,
+  } = useWeb3();
+  const [cUSDLoading, setCUSDLoading] = useState(false);
+  const [nftLoading, setNFTLoading] = useState(false);
+  const [signingLoading, setSigningLoading] = useState(false);
+  const [userOwnedNFTs, setUserOwnedNFTs] = useState<string[]>([]);
+  const [tx, setTx] = useState<any>(undefined);
 
-    useEffect(() => {
-        getUserAddress();
-    }, []);
+  useEffect(() => {
+    getUserAddress();
+  }, []);
 
-    useEffect(() => {
-        const getData = async () => {
-            const tokenURIs = await getNFTs();
-            setUserOwnedNFTs(tokenURIs);
-        };
-        if (address) {
-            getData();
-        }
-    }, [address]);
-
-    async function sendingCUSD() {
-        if (address) {
-            setSigningLoading(true);
-            try {
-                const tx = await sendCUSD(address, "0.1");
-                setTx(tx);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setSigningLoading(false);
-            }
-        }
+  useEffect(() => {
+    const getData = async () => {
+      const tokenURIs = await getNFTs();
+      setUserOwnedNFTs(tokenURIs);
+    };
+    if (address) {
+      getData();
     }
+  }, [address]);
 
-    async function signMessage() {
-        setCUSDLoading(true);
-        try {
-            await signTransaction();
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setCUSDLoading(false);
-        }
+  async function sendingCUSD() {
+    if (address) {
+      setSigningLoading(true);
+      try {
+        const tx = await sendCUSD(address, "0.1");
+        setTx(tx);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setSigningLoading(false);
+      }
     }
+  }
 
-    async function mintNFT() {
-        setNFTLoading(true);
-        try {
-            const tx = await mintMinipayNFT();
-            const tokenURIs = await getNFTs();
-            setUserOwnedNFTs(tokenURIs);
-            setTx(tx);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setNFTLoading(false);
-        }
+  async function signMessage() {
+    setCUSDLoading(true);
+    try {
+      await signTransaction();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCUSDLoading(false);
     }
+  }
 
-    return (
-        <div className="flex flex-col justify-center items-center">
-            {!address && (
-                <div className="h1">Please install Metamask and connect.</div>
-            )}
-            {address && (
-                <div className="h1">
-                    There you go... a canvas for your next Minipay project!
+  async function mintNFT() {
+    setNFTLoading(true);
+    try {
+      const tx = await mintMinipayNFT();
+      const tokenURIs = await getNFTs();
+      setUserOwnedNFTs(tokenURIs);
+      setTx(tx);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNFTLoading(false);
+    }
+  }
+
+  return (
+    <div>
+      <Header />
+
+      <main className="flex min-h-screen flex-col items-center justify-between p-2">
+        <div className="bg-white h-screen">
+          {/* <header className="absolute inset-x-0 top-0 z-50">
+              <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+                <div className="flex lg:flex-1">
+                  <a href="#" className="-m-1.5 p-1.5">
+                    <span className="sr-only">FundFusion</span>
+                    <Image className="h-8 w-auto" src="" alt=""/>
+                  </a>
                 </div>
-            )}
-
-            {address && (
-                <>
-                    <div className="h2 text-center">
-                        Your address:{" "}
-                        <span className="font-bold text-sm">{address}</span>
+                <div className="flex lg:hidden">
+                  <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                    <span className="sr-only">Open main menu</span>
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="hidden lg:flex lg:gap-x-12">
+                  <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Product</a>
+                  <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Features</a>
+                  <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Who we are</a>
+                  <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Contacts</a>
+                </div>
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                  <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Connect Wallet <span aria-hidden="true">&rarr;</span></a>
+                </div>
+              </nav>
+              <div className="lg:hidden" role="dialog" aria-modal="true">
+                <div className="fixed inset-0 z-50"></div>
+                <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+                  <div className="flex items-center justify-between">
+                    <a href="#" className="-m-1.5 p-1.5">
+                      <span className="sr-only">Your Company</span>
+                      <Image className="h-8 w-auto" src="" alt=""/>
+                    </a>
+                    <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700">
+                      <span className="sr-only">Close menu</span>
+                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="mt-6 flow-root">
+                    <div className="-my-6 divide-y divide-gray-500/10">
+                      <div className="space-y-2 py-6">
+                        <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Product</a>
+                        <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Features</a>
+                        <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Marketplace</a>
+                        <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Company</a>
+                      </div>
+                      <div className="py-6">
+                        <a href="#" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+                      </div>
                     </div>
-                    {tx && (
-                        <p className="font-bold mt-4">
-                            Tx Completed:{" "}
-                            {(tx.transactionHash as string).substring(0, 6)}
-                            ...
-                            {(tx.transactionHash as string).substring(
-                                tx.transactionHash.length - 6,
-                                tx.transactionHash.length
-                            )}
-                        </p>
-                    )}
-                    <div className="w-full px-3 mt-7">
-                        <PrimaryButton
-                            loading={signingLoading}
-                            onClick={sendingCUSD}
-                            title="Send 0.1 cUSD to your own address"
-                            widthFull
-                        />
-                    </div>
-
-                    <div className="w-full px-3 mt-6">
-                        <PrimaryButton
-                            loading={cUSDLoading}
-                            onClick={signMessage}
-                            title="Sign a Message"
-                            widthFull
-                        />
-                    </div>
-
-                    {userOwnedNFTs.length > 0 ? (
-                        <div className="flex flex-col items-center justify-center w-full mt-7">
-                            <p className="font-bold">My NFTs</p>
-                            <div className="w-full grid grid-cols-2 gap-3 mt-3 px-2">
-                                {userOwnedNFTs.map((tokenURI, index) => (
-                                    <div
-                                        key={index}
-                                        className="p-2 border-[3px] border-colors-secondary rounded-xl"
-                                    >
-                                        <Image
-                                            alt="MINIPAY NFT"
-                                            src={tokenURI}
-                                            className="w-[160px] h-[200px] object-cover"
-                                            width={160}
-                                            height={200}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="mt-5">You do not have any NFTs yet</div>
-                    )}
-
-                    <div className="w-full px-3 mt-5">
-                        <PrimaryButton
-                            loading={nftLoading}
-                            onClick={mintNFT}
-                            title="Mint Minipay NFT"
-                            widthFull
-                        />
-                    </div>
-                </>
-            )}
+                  </div>
+                </div>
+              </div>
+            </header> */}
+          <div className="relative isolate px-6 pt-2 lg:px-8">
+            <div
+              className="absolute inset-x-0 -top-4 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-2"
+              aria-hidden="true"
+            >
+              <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+            </div>
+            <div className="mx-auto max-w-2xl py-10 sm:py-15 lg:py-30">
+              <div className="hidden sm:mb-8 sm:flex sm:justify-center">
+                <div className="relative rounded-full px-3 py-1  leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                  Announcing our next round of competition.{" "}
+                  <a href="#" className="font-semibold text-indigo-600">
+                    <span
+                      className="absolute inset-0"
+                      aria-hidden="true"
+                    ></span>
+                    Read more <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </div>
+              </div>
+              <div className="text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                  FundFusion
+                </h1>
+                <p className="mt-6 text-lg leading-8 text-gray-600">
+                  Allowing semaless management of hackathons and grants for the
+                  winners.
+                </p>
+                <div className="mt-10 flex items-center justify-center gap-x-6">
+                  <a
+                    href="/grantsList"
+                    className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >Apply for grants</a>
+                  <a
+                    href="#"
+                    className="text-sm font-semibold leading-6 text-gray-900"
+                  >
+                    Learn more <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div
+              className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+              aria-hidden="true"
+            >
+              <div className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"></div>
+            </div>
+          </div>
         </div>
-    );
+      </main>
+
+      <Footer />
+    </div>
+  );
 }
