@@ -7,72 +7,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const {
-    address,
-    getUserAddress,
-    sendCUSD,
-    mintMinipayNFT,
-    getNFTs,
-    signTransaction,
-  } = useWeb3();
-  const [cUSDLoading, setCUSDLoading] = useState(false);
-  const [nftLoading, setNFTLoading] = useState(false);
-  const [signingLoading, setSigningLoading] = useState(false);
-  const [userOwnedNFTs, setUserOwnedNFTs] = useState<string[]>([]);
-  const [tx, setTx] = useState<any>(undefined);
+  const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    getUserAddress();
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      const tokenURIs = await getNFTs();
-      setUserOwnedNFTs(tokenURIs);
-    };
-    if (address) {
-      getData();
-    }
-  }, [address]);
-
-  async function sendingCUSD() {
-    if (address) {
-      setSigningLoading(true);
-      try {
-        const tx = await sendCUSD(address, "0.1");
-        setTx(tx);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setSigningLoading(false);
-      }
-    }
-  }
-
-  async function signMessage() {
-    setCUSDLoading(true);
-    try {
-      await signTransaction();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setCUSDLoading(false);
-    }
-  }
-
-  async function mintNFT() {
-    setNFTLoading(true);
-    try {
-      const tx = await mintMinipayNFT();
-      const tokenURIs = await getNFTs();
-      setUserOwnedNFTs(tokenURIs);
-      setTx(tx);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setNFTLoading(false);
-    }
-  }
+  const handleClick = () => {
+    setIsVisible(!isVisible);
+  };
 
   return (
     <div>
@@ -169,15 +108,26 @@ export default function Home() {
                   <a
                     href="/grantsList"
                     className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >Apply for grants</a>
-                  <a
-                    href="#"
-                    className="text-sm font-semibold leading-6 text-gray-900"
+                  >
+                    Apply for grants
+                  </a>
+                  <button
+                    onClick={() => handleClick}
+                    className="text-sm text-indigo-600 font-semibold leading-6 "
                   >
                     Learn more <span aria-hidden="true">→</span>
-                  </a>
+                  </button>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-4">
+              <p className="text-gray-700">
+                Our grant management system provides a comprehensive solution to
+                manage and track grants efficiently. As an administrator, you
+                can oversee applications, manage grant funds, and generate
+                reports.
+              </p>
             </div>
             <div
               className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
