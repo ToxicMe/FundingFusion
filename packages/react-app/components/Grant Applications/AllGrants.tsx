@@ -87,7 +87,7 @@ const AllGrants = () => {
                                   <div className="flex items-center bg-gray-600 rounded-md p-1">
                                     <span className="mr-2 text-xs font-medium text-white">
                                       <span>
-                                        <Link href={"/"}>VIEW</Link>
+                                        <Link href={`/application/${index}`}>VIEW</Link>
                                       </span>
                                     </span>
                                   </div>

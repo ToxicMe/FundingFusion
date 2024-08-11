@@ -77,7 +77,7 @@ contract FundFusion {
         _;
     }
 
-    function addAdministrator(string memory name) public onlyOwner {
+    function addAdministrator(string memory name) public  {
         administrators.push(Administrator({
             id: totalAdministrators,
             name: name,
@@ -160,8 +160,7 @@ contract FundFusion {
             id: totalApplications,
             projectTitle: projectTitle,
             description: description,
-            problemStatement: problemStatement,
-           
+            problemStatement: problemStatement,          
             demoVideoLink: demoVideoLink,
             liveLink: liveLink,
             sourceCode: sourceCode,

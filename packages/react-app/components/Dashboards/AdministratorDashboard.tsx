@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import {  XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import ApprovedGrants from "../Grant Applications/ApprovedGrants";
 import AllGrants from "../Grant Applications/AllGrants";
 import PaymentHistory from "../Payments/PaymentHistory";
-import { useWriteContract, useReadContract  } from "wagmi";
+import { useWriteContract, useReadContract } from "wagmi";
 import { FundFusionABI, FundFusionAddress } from "@/Blockchain/FundFusionAbi";
 
 const AdministratorDashboard = () => {
@@ -17,6 +17,17 @@ const AdministratorDashboard = () => {
     functionName: "getGrantApplications",
     args: [],
   });
+
+  const { data : amount } = useReadContract({
+    address: FundFusionAddress,
+    abi: FundFusionABI,
+    functionName: "getTotalAmountPaid",
+    args: [],
+  });
+
+  const paidOut = amount as bigint;
+
+
 
   // console.log(data);
 
@@ -35,12 +46,13 @@ const AdministratorDashboard = () => {
     timestamp: bigint;
   }
 
-  const applications =(data as Application[])|| [];
+  const applications = (data as Application[]) || [];
 
-  const approvedApplications = (data as Application[])?.filter((application) => {
-    return application.approved === true;
-  });   
-  
+  const approvedApplications = (data as Application[])?.filter(
+    (application) => {
+      return application.approved === true;
+    }
+  );
 
   console.log(approvedApplications);
 
@@ -143,11 +155,7 @@ const AdministratorDashboard = () => {
                       aria-hidden="true"
                     />
                     <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-4 h-full">
-                      {/* <button
-                      id="toggleSidebarMobileSearch"
-                      type="button"
-                      className="lg:hidden text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg"
-                    ></button> */}
+                    
                       <div className="flex-1 px-3 bg-white divide-y space-y-1 h-full">
                         <ul className="space-y-2 pb-2">
                           <li>
@@ -454,7 +462,7 @@ const AdministratorDashboard = () => {
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
                               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                                {approvedApplications?.length}
+                                {Number(paidOut)}
                               </span>
                               <h3 className="text-base font-normal text-gray-500">
                                 Total Paid Out
@@ -494,7 +502,7 @@ const AdministratorDashboard = () => {
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
                               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                              {applications.length}
+                                {applications.length}
                               </span>
                               <h3 className="text-base font-normal text-gray-500">
                                 Users
@@ -534,77 +542,70 @@ const AdministratorDashboard = () => {
                               role="list"
                               className="divide-y divide-gray-200"
                             >
-                               {applications.length === 0 ? (
-                              <div>
-                                <li className="py-3 sm:py-4">
-                                  <div className="flex items-center space-x-4">
-                                    <div className="flex-shrink-0">
-                                      <div className="h-10 w-10 rounded-full bg-gray-300"></div>
+                              {applications.length === 0 ? (
+                                <div>
+                                  <li className="py-3 sm:py-4">
+                                    <div className="flex items-center space-x-4">
+                                      <div className="flex-shrink-0">
+                                        <div className="h-10 w-10 rounded-full bg-gray-300"></div>
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-medium text-gray-900 truncate">
+                                          No applications
+                                        </p>
+                                        <p className="text-sm text-gray-500 truncate">
+                                          Apply for grants
+                                        </p>
+                                      </div>
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-sm font-medium text-gray-900 truncate">
-                                        No applications
-                                      </p>
-                                      <p className="text-sm text-gray-500 truncate">
-                                        Apply for grants</p>
-                                        </div>
-                                        </div>
-                                        </li>
-                              
-                              </div>
-                             
-                                      
-                            ): 
-                            (
-                              applications?.map((application: Application) => (
-                                <li className="py-3 sm:py-4">
-                                <div className="flex items-center space-x-4">
-                                  <div className="flex-shrink-0">
-                                    <Image
-                                      className="h-8 w-8 rounded-full"
-                                      width={300}
-                                      height={300}
-                                      src=""
-                                      alt="Neil image"
-                                    />
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-900 truncate">
-                                      {application.projectTitle}
-                                    </p>
-                                    <p className="text-sm text-gray-500 truncate">
-                                      <a
-                                        href="/cdn-cgi/l/email-protection"
-                                        className="__cf_email__"
-                                        data-cfemail="17727a767e7b57607e7973646372653974787a"
-                                      >
-                                        [{new Date(Number(application.timestamp)*1000).toLocaleString()}]
-                                      </a>
-                                    </p>
-                                  </div>
-                                  <Link href="/cdn-cgi/l/email-protection">
-                                    <div className="inline-flex items-center text-base font-semibold text-gray-900">
-                                      view
-                                    </div>
-                                  </Link>
+                                  </li>
                                 </div>
-                              </li>
-
-                              )
-                            ))}
-
-
-
-
-
-
-
-
-                              
+                              ) : (
+                                applications?.map(
+                                  (application: Application) => (
+                                    <li className="py-3 sm:py-4">
+                                      <div className="flex items-center space-x-4">
+                                        <div className="flex-shrink-0">
+                                          <Image
+                                            className="h-8 w-8 rounded-full"
+                                            width={300}
+                                            height={300}
+                                            src=""
+                                            alt="Neil image"
+                                          />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <p className="text-sm font-medium text-gray-900 truncate">
+                                            {application.projectTitle}
+                                          </p>
+                                          <p className="text-sm text-gray-500 truncate">
+                                            <a
+                                              href="/cdn-cgi/l/email-protection"
+                                              className="__cf_email__"
+                                              data-cfemail="17727a767e7b57607e7973646372653974787a"
+                                            >
+                                              [
+                                              {new Date(
+                                                Number(application.timestamp) *
+                                                  1000
+                                              ).toLocaleString()}
+                                              ]
+                                            </a>
+                                          </p>
+                                        </div>
+                                        <Link href="/cdn-cgi/l/email-protection">
+                                          <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                                            view
+                                          </div>
+                                        </Link>
+                                      </div>
+                                    </li>
+                                  )
+                                )
+                              )}
                             </ul>
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   )}

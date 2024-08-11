@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Link from "next/link";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
@@ -112,23 +113,28 @@ export default function Home() {
                     Apply for grants
                   </a>
                   <button
-                    onClick={() => handleClick}
-                    className="text-sm text-indigo-600 font-semibold leading-6 "
+                    onClick={() => handleClick()}
+                    className="text-sm text-indigo-600 font-semibold hover:cursor-pointer leading-6 "
                   >
                     Learn more <span aria-hidden="true">→</span>
                   </button>
                 </div>
               </div>
             </div>
+            {isVisible && (
+              <div className="mt-4">
+                <p className="text-gray-700">
+                  Our grant management system provides a comprehensive solution
+                  to manage and track grants efficiently. As an administrator,
+                  you can oversee applications, manage grant funds, and generate
+                  reports.
+                </p>
+                <Link href={"/admin"}>
+                  <p className="text-indigo-600">Register as administrator </p>
+                </Link>
+              </div>
+            )}
 
-            <div className="mt-4">
-              <p className="text-gray-700">
-                Our grant management system provides a comprehensive solution to
-                manage and track grants efficiently. As an administrator, you
-                can oversee applications, manage grant funds, and generate
-                reports.
-              </p>
-            </div>
             <div
               className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
               aria-hidden="true"
