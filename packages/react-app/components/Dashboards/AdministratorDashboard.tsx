@@ -556,7 +556,7 @@ const AdministratorDashboard = () => {
                                 </div>
                               ) : (
                                 applications?.map(
-                                  (application: Application) => (
+                                  (application: Application, index: number) => (
                                     <li className="py-3 sm:py-4">
                                       <div className="flex items-center space-x-4">
                                         <div className="flex-shrink-0">
@@ -587,7 +587,7 @@ const AdministratorDashboard = () => {
                                             </a>
                                           </p>
                                         </div>
-                                        <Link href="/cdn-cgi/l/email-protection">
+                                        <Link href={`/application/${index}`}>
                                           <div className="inline-flex items-center text-base font-semibold text-gray-900">
                                             view
                                           </div>
