@@ -18,16 +18,16 @@ const AdministratorDashboard = () => {
     args: [],
   });
 
-  const { data : amount } = useReadContract({
+  const { data: amount } = useReadContract({
     address: FundFusionAddress,
     abi: FundFusionABI,
     functionName: "getTotalAmountPaid",
     args: [],
   });
 
+  console.log(amount);
   const paidOut = amount as bigint;
-
-
+  console.log(Number(paidOut));
 
   // console.log(data);
 
@@ -54,7 +54,7 @@ const AdministratorDashboard = () => {
     }
   );
 
-  console.log(approvedApplications);
+  // console.log(approvedApplications);
 
   const handleButtonClick = (sectionName: string) => {
     setActiveSection(sectionName); // Update active section on dashboard
@@ -65,7 +65,7 @@ const AdministratorDashboard = () => {
     setIsSidebarOpen(!isSideBarOpen);
   };
 
-  console.log(isSideBarOpen);
+  // console.log(isSideBarOpen);
 
   return (
     <div>
@@ -109,17 +109,12 @@ const AdministratorDashboard = () => {
                     </svg>
                   </button>
                   <a
-                    href="#"
+                    href="/"
                     className="text-xl font-bold flex items-center lg:ml-2.5"
                   >
-                    <Image
-                      src=""
-                      width={300}
-                      height={300}
-                      className="h-6 mr-2"
-                      alt="Windster Logo"
-                    />
-                    <span className="self-center whitespace-nowrap text-black"></span>
+                    <span className="self-center whitespace-nowrap text-black">
+                      FundFusion
+                    </span>
                   </a>
                   <form action="#" className="hidden lg:block lg:pl-32">
                     <label htmlFor="topbar-search" className="sr-only">
@@ -155,7 +150,6 @@ const AdministratorDashboard = () => {
                       aria-hidden="true"
                     />
                     <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-4 h-full">
-                    
                       <div className="flex-1 px-3 bg-white divide-y space-y-1 h-full">
                         <ul className="space-y-2 pb-2">
                           <li>

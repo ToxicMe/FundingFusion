@@ -18,32 +18,37 @@ const config: HardhatUserConfig = {
       url: "https://alfajores-forno.celo-testnet.org",
       accounts: [PRIVATE_KEY],
     },
+    "Cel2-Dango-Testnet": {
+      url: "https://forno.dango.celo-testnet.org/",
+      accounts: [PRIVATE_KEY],
+    },
   },
   etherscan: {
     apiKey: {
-        alfajores: CELOSCAN_API_KEY,
-        celo: CELOSCAN_API_KEY,
+      alfajores: CELOSCAN_API_KEY,
+      celo: CELOSCAN_API_KEY,
+      "Cel2-Dango-Testnet":CELOSCAN_API_KEY,
     },
     customChains: [
-        {
-            network: "alfajores",
-            chainId: 44787,
-            urls: {
-                apiURL: "https://api-alfajores.celoscan.io/api",
-                browserURL: "https://alfajores.celoscan.io",
-            },
+      {
+        network: "alfajores",
+        chainId: 44787,
+        urls: {
+          apiURL: "https://api-alfajores.celoscan.io/api",
+          browserURL: "https://alfajores.celoscan.io",
         },
-        {
-            network: "celo",
-            chainId: 42220,
-            urls: {
-                apiURL: "https://api.celoscan.io/api",
-                browserURL: "https://celoscan.io/",
-            },
+      },
+
+      {
+        network: "Cel2-Dango-Testnet",
+        chainId: 44787,
+        urls: {
+          apiURL: "https://celo-dango.blockscout.com/api",
+          browserURL: "https://celo-dango.blockscout.com",
         },
+      },
     ],
-},
-  
+  },
 };
 
 export default config;

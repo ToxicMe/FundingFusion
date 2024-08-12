@@ -67,7 +67,7 @@ const AllGrants = () => {
                       <tbody className="divide-y divide-gray-100">
                         {applications.length === 0 ? (
                           <div className="text-center">
-                            <h1 className="text-3xl font-bold">
+                            <h1 className="text-gray-500">
                               No Applications
                             </h1>
                           </div>

@@ -1,13 +1,10 @@
 import { FundFusionABI, FundFusionAddress } from "@/Blockchain/FundFusionAbi";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useWriteContract } from "wagmi";
 import { PinataSDK } from "pinata";
-import dotenv from "dotenv";
-require("dotenv").config();
+
 
 const GrantApplication = () => {
   const router = useRouter();
@@ -32,9 +29,6 @@ const GrantApplication = () => {
     try {
       setUploading(true);
       console.log(uploading);
-      // const data = new FormData();
-      // data.append("file", fileToUpload);
-      // const file = new File(fileToUpload,"", { type: "file" });
       const result = async () => {
         try {
           const upload = await pinata.upload.file(fileToUpload);
@@ -53,9 +47,6 @@ const GrantApplication = () => {
         console.log("error");
       }
 
-      // const resData = await res.json();
-      // setCid(resData.IpfsHash);
-      // console.log(resData.IpfsHash);
       setUploading(false);
     } catch (e: any) {
       console.log(e);
@@ -64,8 +55,6 @@ const GrantApplication = () => {
     }
   };
 
-  // console.log(uploading);
-  // console.log(file);
 
   const handleChange = (e: any) => {
     const selectedFile = e.target.files[0];
