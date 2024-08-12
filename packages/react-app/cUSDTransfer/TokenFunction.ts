@@ -11,12 +11,12 @@ import { toast } from "sonner";
 export const processCheckout = async ( receiver: `0x${string}` , amount: number ) => {
     if (window.ethereum) {
       const privateClient = createWalletClient({
-        chain: celo,
+        chain: celoAlfajores,
         transport: custom(window.ethereum),
       });
 
       const publicClient = createPublicClient({
-        chain: celo,
+        chain: celoAlfajores,
         transport: custom(window.ethereum),
       });
 

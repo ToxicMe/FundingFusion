@@ -456,7 +456,7 @@ const AdministratorDashboard = () => {
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
                               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                                {Number(paidOut)}
+                                {Number(paidOut)/10**18} cUSD
                               </span>
                               <h3 className="text-base font-normal text-gray-500">
                                 Total Paid Out
